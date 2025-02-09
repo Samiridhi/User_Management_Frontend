@@ -1,3 +1,5 @@
+// eslint-disable-next-line react-hooks/exhaustive-deps
+
 import React, { useState, useEffect } from "react";
 import apiService from "../services/apiService";
 import SearchBar from "../components/SearchBar";
