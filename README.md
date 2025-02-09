@@ -21,7 +21,7 @@ This is the frontend of the User Management Application, designed to communicate
 
 2. Install dependencies:
    ```bash
-   npm install
+   npm install -f
    ```
 
 3. Start the frontend development server:
