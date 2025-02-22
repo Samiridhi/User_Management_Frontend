@@ -14,7 +14,18 @@ const SearchBar = ({ searchTerm, setSearchTerm, onSearch }) => {
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+    <div style={{ display: "flex", alignItems: "center", marginBottom: "20px",
+      color: "white",
+      fontWeight: "normal",
+      textTransform: "none",
+      borderRadius: "10px",
+      padding: "10px 20px",
+      boxShadow: "0px 4px 5px rgba(0,0,0,0.2)",
+      transition: "0.3s",
+      "&:hover": {
+        background: "linear-gradient(135deg,rgb(127, 142, 173) 30%,rgb(183, 191, 202) 90%)",
+        transform: "scale(1.05)",
+      }, }}>
       <TextField
         variant="outlined"
         fullWidth

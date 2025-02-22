@@ -119,13 +119,14 @@ const HomePage = () => {
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={handleSearch} />
         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "10px", marginBottom: "20px" }}>
           <SortButton sortOrder={sortOrder} onSort={handleSort} />
-          <RoleFilter roles={roles} filterRole={filterRole} setFilterRole={setFilterRole} />
-        </div>
-        <AttributeSelector
+          <AttributeSelector
           availableAttributes={availableAttributes}
           displayedAttributes={displayedAttributes}
           handleAttributeSelection={handleAttributeSelection}
         />
+          <RoleFilter roles={roles} filterRole={filterRole} setFilterRole={setFilterRole} />
+        </div>
+       
         {isSearching && <Typography color="primary">Searching...</Typography>}
         {errorMessage && <Typography color="error">{errorMessage}</Typography>}
         <UserTable users={filteredUsers} displayedAttributes={displayedAttributes} flattenObject={flattenObject} />
