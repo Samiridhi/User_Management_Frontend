@@ -53,7 +53,9 @@ const HomePage = () => {
       users.forEach((user) => {
         const flatUser = flattenObject(user);
         Object.keys(flatUser).forEach((attr) => {
-          if(attr !=="image") allAttributes.add(attr) });
+          if (attr !=="image") {
+            allAttributes.add(attr)
+          } });
       });
 
       setAvailableAttributes(Array.from(allAttributes));
@@ -102,7 +104,7 @@ const HomePage = () => {
   };
 
   const handleAttributeSelection = (event) => {
-    const value = event.target.value;
+    const {value} = event.target;
     setDisplayedAttributes(typeof value === "string" ? value.split(",") : value);
   };
 

@@ -5,7 +5,9 @@ import "../UserDetailsModal.css";
 const UserDetailsModal = ({ user, onClose }) => {
   const navigate = useNavigate();
 
-  if (!user) return null;
+  if (!user) {
+    return null;
+  }
 
   const handleMoreDetails = () => {
     navigate(`/user-details/${user.id}`, { state: { user } });
