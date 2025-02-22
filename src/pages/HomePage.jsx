@@ -2,14 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import apiService from "../services/apiService";
-import SearchBar from "../components/SearchBar";
+// import SearchBar from "../components/SearchBar";
 import SortButton from "../components/SortButton";
 import RoleFilter from "../components/RoleFilter";
 import AttributeSelector from "../components/AttributeSelector";
 import UserTable from "../components/UserTable";
 import { Card, Typography } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import { Suspense } from "react";
+const SearchBar = React.lazy(() => import('../components/SearchBar'));
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const HomePage = () => {
   const [filterRole, setFilterRole] = useState("");
   const [roles, setRoles] = useState([]);
   const [displayedAttributes, setDisplayedAttributes] = useState([
-    "image","id", "firstName", "lastName", "email", "ssn", "age", "role"
+    "image", "id", "firstName", "lastName", "email", "ssn", "age", "role"
   ]);
   const [availableAttributes, setAvailableAttributes] = useState([]);
 
@@ -53,9 +54,10 @@ const HomePage = () => {
       users.forEach((user) => {
         const flatUser = flattenObject(user);
         Object.keys(flatUser).forEach((attr) => {
-          if (attr !=="image") {
+          if (attr !== "image") {
             allAttributes.add(attr)
-          } });
+          }
+        });
       });
 
       setAvailableAttributes(Array.from(allAttributes));
@@ -70,7 +72,7 @@ const HomePage = () => {
     }
   }, [searchTerm]);
 
-   const handleSearch = async (term) => {
+  const handleSearch = async (term) => {
     if (term.length < 3) {
       alert("Please enter at least 3 characters to search.");
       return;
@@ -104,7 +106,7 @@ const HomePage = () => {
   };
 
   const handleAttributeSelection = (event) => {
-    const {value} = event.target;
+    const { value } = event.target;
     setDisplayedAttributes(typeof value === "string" ? value.split(",") : value);
   };
 
@@ -116,18 +118,21 @@ const HomePage = () => {
         <Typography variant="h4" component="h1" align="center" gutterBottom>
           USERS DASHBOARD
         </Typography>
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={handleSearch} />
+        <Suspense fallback={<div>Searching users...</div>}>
+          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={handleSearch} />
+        </Suspense>
+
         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "10px", marginBottom: "20px" }}>
           <SortButton sortOrder={sortOrder} onSort={handleSort} />
           <AttributeSelector
-          availableAttributes={availableAttributes}
-          displayedAttributes={displayedAttributes}
-          handleAttributeSelection={handleAttributeSelection}
-        />
+            availableAttributes={availableAttributes}
+            displayedAttributes={displayedAttributes}
+            handleAttributeSelection={handleAttributeSelection}
+          />
           <RoleFilter roles={roles} filterRole={filterRole} setFilterRole={setFilterRole} />
         </div>
-       
-        {isSearching && <Typography color="primary">Searching...</Typography>}
+
+        {isSearching && <Typography color="primary">Searching users...</Typography>}
         {errorMessage && <Typography color="error">{errorMessage}</Typography>}
         <UserTable users={filteredUsers} displayedAttributes={displayedAttributes} flattenObject={flattenObject} />
       </Card>
