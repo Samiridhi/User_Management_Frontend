@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 
 const SortButton = ({ sortOrder, onSort }) => {
   return (
-    <Button onClick={onSort} variant="contained" color="secondary">
+    <Button onClick={onSort} variant="contained" color="primary">
       Sort by Age ({sortOrder})
     </Button>
   );

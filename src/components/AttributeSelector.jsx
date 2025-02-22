@@ -32,7 +32,7 @@ const AttributeSelector = ({
     return parts.map((part) => part.toUpperCase()).join(" ");
   };
 
-  const MANDATORY_ATTRIBUTES = ["id", "firstName", "lastName", "email", "ssn", "age", "role"];
+  const MANDATORY_ATTRIBUTES = ["image", "id", "firstName", "lastName", "email", "ssn", "age", "role"];
 
   const handleSelectionChange = (event) => {
     const selectedAttributes = event.target.value;
@@ -43,14 +43,14 @@ const AttributeSelector = ({
 
   return (
     <FormControl variant="outlined" fullWidth style={{ marginBottom: "20px" }}>
-      <InputLabel style={{ fontSize: "16px", color: "#555" }}>
+      {/* <InputLabel style={{ fontSize: "16px", color: "#555" }}>
         Select Attributes to Display
-      </InputLabel>
+      </InputLabel> */}
       <Select
         multiple
         value={displayedAttributes}
         onChange={handleSelectionChange}
-        input={<OutlinedInput label="Select Attributes to Display" />}
+        // input={<OutlinedInput label="Select Attributes to Display" />}
         renderValue={(selected) => {
           if (selected.length === availableAttributes.length) {
             return "All Selected";
@@ -60,13 +60,13 @@ const AttributeSelector = ({
           // }
           return (
             <div style={{ display: "flex", flexWrap: "wrap", gap: "5px" }}>
-              {/* {selected.map((value) => ( */}
-                <Chip
-                  // key={value}
-                  label={formatAttributeName(`Display More Attributes`)}
-                  style={{ backgroundColor: "#e0e0e0", fontWeight: "bold" }}
-                />
-              {/* ))} */}
+
+              <Chip
+
+                label={formatAttributeName(`Display More Attributes`)}
+                style={{ backgroundColor: "#ced2d6", fontWeight: "bold" }}
+              />
+
             </div>
           );
         }}
@@ -77,7 +77,7 @@ const AttributeSelector = ({
           <MenuItem key={attribute} value={attribute}>
             <Checkbox
               checked={displayedAttributes.includes(attribute)}
-              disabled={MANDATORY_ATTRIBUTES.includes(attribute)} // Disable mandatory attributes
+              disabled={MANDATORY_ATTRIBUTES.includes(attribute)}
             />
             {formatAttributeName(attribute)}
           </MenuItem>

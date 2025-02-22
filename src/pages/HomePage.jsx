@@ -8,9 +8,14 @@ import RoleFilter from "../components/RoleFilter";
 import AttributeSelector from "../components/AttributeSelector";
 import UserTable from "../components/UserTable";
 import { Card, Typography } from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
+
 
 const HomePage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [searchTerm, setSearchTerm] = useState(new URLSearchParams(location.search).get("search") || "");
   const [users, setUsers] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -18,20 +23,16 @@ const HomePage = () => {
   const [filterRole, setFilterRole] = useState("");
   const [roles, setRoles] = useState([]);
   const [displayedAttributes, setDisplayedAttributes] = useState([
-    "id",
-    "firstName",
-    "lastName",
-    "role",
-    "email",
-    "age",
-    "ssn",
+    "image","id", "firstName", "lastName", "email", "ssn", "age", "role"
   ]);
   const [availableAttributes, setAvailableAttributes] = useState([]);
 
   const flattenObject = (obj, parentKey = "", result = {}) => {
     for (let key in obj) {
       if (obj.hasOwnProperty(key)) {
-        const newKey = parentKey ? `${parentKey}.${key}` : key;
+        console.log("key: ", key)
+        console.log("parent key :", parentKey)
+        const newKey = parentKey ? `${parentKey} ${key}` : key;
         if (typeof obj[key] === "object" && obj[key] !== null && !Array.isArray(obj[key])) {
           flattenObject(obj[key], newKey, result);
         } else {
@@ -43,6 +44,7 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    // creating a 
     const uniqueRoles = [...new Set(users.map((user) => user.role))];
     setRoles(uniqueRoles);
 
@@ -50,19 +52,29 @@ const HomePage = () => {
       const allAttributes = new Set();
       users.forEach((user) => {
         const flatUser = flattenObject(user);
-        Object.keys(flatUser).forEach((attr) => allAttributes.add(attr));
+        Object.keys(flatUser).forEach((attr) => {
+          if(attr !=="image") allAttributes.add(attr) });
       });
 
       setAvailableAttributes(Array.from(allAttributes));
     }
+    // users is a dependency array and whenenver this array users will change then this will call this use effect.. (side effects like api calls)
+    // by default it will be called once on first page load
   }, [users]);
 
-  const handleSearch = async (term) => {
+  useEffect(() => {
+    if (searchTerm.length >= 3 && users.length === 0) {
+      handleSearch(searchTerm);
+    }
+  }, [searchTerm]);
+
+   const handleSearch = async (term) => {
     if (term.length < 3) {
       alert("Please enter at least 3 characters to search.");
       return;
     }
 
+    navigate(`/?search=${term}`, { replace: true });
     setIsSearching(true);
     setErrorMessage("");
     setUsers([]);
@@ -73,6 +85,8 @@ const HomePage = () => {
         setErrorMessage("No users found matching your search criteria.");
       } else {
         setUsers(result);
+        sessionStorage.setItem("searchResults", JSON.stringify(result)); // ✅ Store results
+        sessionStorage.setItem("searchTerm", term);
       }
     } catch (error) {
       console.error("Search failed:", error);
@@ -81,7 +95,6 @@ const HomePage = () => {
       setIsSearching(false);
     }
   };
-
   const handleSort = () => {
     const sortedUsers = [...users].sort((a, b) => (sortOrder === "asc" ? a.age - b.age : b.age - a.age));
     setUsers(sortedUsers);
@@ -99,7 +112,7 @@ const HomePage = () => {
     <div style={{ padding: "20px", maxWidth: "100%", margin: "0 auto" }}>
       <Card style={{ padding: "20px", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)" }}>
         <Typography variant="h4" component="h1" align="center" gutterBottom>
-          USERS
+          USERS DASHBOARD
         </Typography>
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={handleSearch} />
         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "10px", marginBottom: "20px" }}>

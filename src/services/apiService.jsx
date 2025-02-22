@@ -4,27 +4,27 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const apiService = {
   // Fetch user by email
-  getUserByEmail: (email) => {
-    return axios.get(`${BASE_URL}/email`, { params: { email } })
-      .then(response => response.data);
+  getUserByEmail: async (email) => {
+    const response = await axios.get(`${BASE_URL}/email`, { params: { email } });
+    return response.data;
   },
 
   // Fetch user by ID
-  getUserById: (id) => {
-    return axios.get(`${BASE_URL}/${id}`)
-      .then(response => response.data);
+  getUserById: async (id) => {
+    const response = await axios.get(`${BASE_URL}/${id}`);
+    return response.data;
   },
 
   // Search users by keyword
-  searchUsers: (keyword) => {
-    return axios.get(BASE_URL, { params: { keyword } })
-      .then(response => response.data);
+  searchUsers: async (keyword) => {
+    const response = await axios.get(BASE_URL, { params: { keyword } });
+    return response.data;
   },
 
   // Load users from external API
-  loadUsers: () => {
-    return axios.post(`${BASE_URL}/load`)
-      .then(response => response.data);
+  loadUsers: async () => {
+    const response = await axios.post(`${BASE_URL}/load`);
+    return response.data;
   }
 };
 
